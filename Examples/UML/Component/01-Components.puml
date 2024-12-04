@@ -1,0 +1,11 @@
+@startuml Components - Component Diagram
+
+skin rose
+
+title Components - Component Diagram
+
+[Business Logic]
+[Data Access] as DA  
+component [Graphic User\nInterface] as GUI
+
+@enduml

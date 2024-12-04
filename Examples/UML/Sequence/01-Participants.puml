@@ -1,0 +1,13 @@
+@startuml Participants - Sequence Diagram
+
+skin rose
+
+title "Participants - Sequence Diagram"
+
+actor User
+boundary "Web GUI" as GUI
+control "Shopping Cart" as SC
+entity Widget
+database Widgets
+
+@enduml

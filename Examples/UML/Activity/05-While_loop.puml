@@ -1,0 +1,19 @@
+@startuml While loop - Activity Diagram
+
+skin rose
+
+title While Loop - Activity Diagram 
+
+
+start
+
+while (Hungry?)  is (Yes)
+  :Eat Hot Wings;
+  :Drink Homebrew;
+endwhile (No)
+
+:Go To Sleep;
+
+stop
+
+@enduml

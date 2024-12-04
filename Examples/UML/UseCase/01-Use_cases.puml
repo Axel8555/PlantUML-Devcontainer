@@ -1,0 +1,13 @@
+@startuml Use Cases - Use Case Diagram
+
+skin rose
+
+title Use Case Diagram 
+
+
+(Login)
+(Run Process) as (Proc1)
+usecase (Undo Process)
+usecase (Log Out) as UC4
+
+@enduml

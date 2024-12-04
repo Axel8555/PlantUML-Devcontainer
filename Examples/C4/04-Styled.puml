@@ -1,0 +1,63 @@
+@startuml Styled_C4_Diagram
+!define C4P https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master
+!include C4P/C4_Context.puml
+!include C4P/C4_Container.puml
+!include C4P/C4_Component.puml
+
+' Inclusion of custom icons
+!define MATERIAL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/refs/heads/main/icons/material
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/refs/heads/main/icons/devicons2
+!define GOVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/refs/heads/main/icons/govicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/refs/heads/main/icons/font-awesome
+!include FONTAWESOME/ticket.puml
+!include MATERIAL/add_shopping_cart.puml
+!include MATERIAL/credit_card.puml
+!include MATERIAL/mail.puml
+!include MATERIAL/lock.puml
+!include MATERIAL/headset.puml
+!include FONTAWESOME/server.puml
+!include GOVICONS/user.puml
+!include FONTAWESOME/fire.puml
+
+LAYOUT_TOP_DOWN()
+
+' Font and style configuration
+skinparam {
+  DefaultFontName "Arial"
+  DefaultFontSize 12
+  BackgroundColor #F9F9F9
+  ArrowColor #1D70B8
+  ArrowThickness 2
+  RectangleFontColor #000000
+  RectangleFontStyle Bold
+}
+
+AddRelTag("custom_rel_firewall",$lineColor="red", $sprite="fire",$legendText="Firewall", $lineStyle = DashedLine())
+AddElementTag("custom_element", $fontColor="#ffffbf", $borderColor="#ffffbf", $bgColor="#d73027", $legendText="Custom Element")
+AddBoundaryTag("custom_boundary", $fontColor="#ffffbf", $borderColor="#ffffbf", $bgColor="#040901", $legendText="Custom Boundary")
+
+
+Person_Ext(customer, "Customer", "Uses our services.", $sprite="user")
+Person(support, "Support Agent", "Assists customers.", $sprite="headset")
+
+Boundary(mainSystem, "E-commerce System", $tags="custom_boundary") {
+    System(frontend, "Online Store Frontend", "Used for browsing and shopping", $sprite="add_shopping_cart")
+
+    System(apiSystem, "Backend Services and Databases", "Handles business logic and data.", $sprite="server", $tags="custom_element")
+}
+
+System_Ext(paymentGateway, "Payment Gateway", "Processes payments.", $sprite="credit_card")
+System_Ext(emailSystem, "Email System", "Sends notifications.", $sprite="mail")
+System_Ext(authService, "Authentication Service", "Manages authentication.", $sprite="lock")
+System_Ext(supportSystem, "Support System", "Manages tickets.", $sprite="ticket")
+
+Rel(customer, frontend, "Uses for browsing and shopping", "HTTPS")
+Rel(frontend, apiSystem, "Consumes services from", "HTTPS")
+Rel(apiSystem, paymentGateway, "Processes payments with", "HTTPS", $tags="custom_rel_firewall")
+Rel(apiSystem, emailSystem, "Sends notifications through", "SMTP", $tags="custom_rel_firewall")
+Rel(apiSystem, authService, "Authenticates users via", "HTTPS")
+Rel(support, supportSystem, "Manages support using", "HTTPS")
+Rel(supportSystem, apiSystem, "Accesses data from", "HTTPS")
+
+SHOW_LEGEND()
+@enduml

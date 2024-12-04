@@ -1,0 +1,13 @@
+@startuml Connections - Use Case Diagram
+
+skin rose
+
+Employee -up-|> User
+Client -up-|> User
+Supervisor -up-|> User
+Employee --> (Login)
+Supervisor --> (Login)
+Client ..> (Login) : NO!!!!
+Supervisor --> (Create / Delete User): I am god
+
+@enduml

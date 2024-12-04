@@ -1,0 +1,18 @@
+@startuml Simple State Model - State Diagram
+
+skin rose
+
+title Simple State Model
+[*] --> GlassEmpty
+GlassEmpty --> [*]
+GlassEmpty : Contents - void
+
+GlassEmpty -> GlassFull
+GlassFull : Water
+GlassFull --> [*]
+
+note right of GlassFull
+  This is a note
+end note
+
+@enduml

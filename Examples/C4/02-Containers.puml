@@ -1,0 +1,39 @@
+@startuml C4_Container_Diagram
+!define C4P https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master
+!include C4P/C4_Container.puml
+
+LAYOUT_TOP_DOWN()
+
+Person_Ext(customer, "Customer", "An online store customer.", $type="External", $sprite="person")
+Person(support, "Support Agent", "Provides support to customers.", $type="Internal", $sprite="person2")
+
+Container_Ext(supportSystem, "Support System", "CRM", "Manages tickets.", $sprite="crm")
+Container_Ext(emailSystem, "Email System", "SMTP Server", "Sends emails.", $sprite="email")
+Container_Ext(paymentGateway, "Payment Gateway", "External Service", "Processes payments.", $sprite="payment")
+Container_Ext(authenticationService, "Authentication Service", "OAuth2 Provider", "Manages authentication.", $sprite="auth")
+
+System_Boundary(onlineStoreBoundary, "Online Store Frontend") {
+    Container(webApp, "Web Application", "JavaScript/React", "Allows customers to browse and purchase products.", $sprite="webapp")
+    Container(mobileApp, "Mobile Application", "Kotlin/Swift", "Allows interaction from mobile devices.", $sprite="mobile")
+}
+
+System_Boundary(c1, "Backend services and databases") {
+    Container(api, "API", "Java/Spring Boot", "Handles business logic and data.", $sprite="api")
+    ContainerDb(database, "Database", "MySQL", "Stores products, orders, and customers.", $sprite="database")
+    ContainerQueue(messageQueue, "Message Queue", "RabbitMQ", "Asynchronous communication.", $sprite="queue")
+}
+
+Rel(customer, webApp, "Uses to browse and purchase", "HTTPS")
+Rel(customer, mobileApp, "Uses to purchase on mobile", "HTTPS")
+Rel(webApp, api, "Requests services from", "JSON/HTTPS")
+Rel(mobileApp, api, "Requests services from", "JSON/HTTPS")
+Rel(api, database, "Reads and writes data to", "JDBC")
+Rel(api, messageQueue, "Sends messages to", "AMQP")
+Rel(api, authenticationService, "Authenticates users via", "HTTPS")
+Rel(api, emailSystem, "Sends emails through", "SMTP")
+Rel(api, paymentGateway, "Processes payments using", "HTTPS")
+Rel(support, supportSystem, "Accesses for support via", "HTTPS")
+Rel(supportSystem, api, "Accesses data from", "HTTPS")
+
+SHOW_LEGEND()
+@enduml

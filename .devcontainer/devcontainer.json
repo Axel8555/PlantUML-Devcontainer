@@ -1,0 +1,24 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+  "name": "Debian con PlantUML",
+  "build": { "dockerfile": "Dockerfile" },
+  //"image": "mcr.microsoft.com/devcontainers/base:bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/git-lfs:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+    // "ghcr.io/devcontainers/features/java:1": {},
+    // "ghcr.io/prulloac/devcontainer-features/latex:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["jebbs.plantuml", "esbenp.prettier-vscode"],
+      "settings": {
+        "plantuml.localExecutable": "/usr/bin/java -jar /usr/local/bin/plantuml.jar",
+        "plantuml.exportOutDir": "docs/diagrams/out",
+        "plantuml.diagramsRoot": "docs/diagrams/src",
+        "graphviz.dotPath": "/usr/bin/dot"
+      }
+    }
+  }
+}

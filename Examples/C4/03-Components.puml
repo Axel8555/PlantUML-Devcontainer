@@ -1,0 +1,107 @@
+@startuml C4_Component_Diagram
+!define C4P https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master
+!define C4_Component C4P/C4_Component.puml
+!include C4_Component
+
+LAYOUT_TOP_DOWN()
+
+' Definition of people
+Person_Ext(customer, "Customer", "A customer of the online store.", $type="External", $sprite="person")
+Person(support, "Support Agent", "Provides support to customers.", $type="Internal", $sprite="person2")
+
+' External Components
+Component_Ext(email_system, "Email System", "SMTP", "Sends emails.", $sprite="email")
+Component_Ext(payment_gateway, "Payment Gateway", "External Service", "Processes payments.", $sprite="payment")
+Component_Ext(analyticsService, "Analytics Service", "Google Analytics", "Analyzes usage data.", $sprite="analytics")
+Component_Ext(supportSystem, "Support System", "CRM", "Manages tickets.", $sprite="crm")
+Component_Ext(authenticationService, "Authentication Service", "OAuth2", "Manages authentication and authorization.", $sprite="auth")
+
+' Web Application Container
+Container_Boundary(webapp, "Web Application") {
+    Component(uiComponent, "User Interface", "React", "Presents the graphical interface to the user.", $sprite="html")
+    Component(authComponent, "Authentication Module", "JavaScript", "Manages user authentication.", $sprite="auth")
+    Component(productCatalogComponent, "Product Catalog", "React", "Displays available products.", $sprite="catalog")
+    Component(cartComponent, "Shopping Cart", "JavaScript", "Manages the user's shopping cart.", $sprite="cart")
+    Component(orderComponent, "Order Processing", "JavaScript", "Processes purchase orders.", $sprite="order")
+    Component(notificationComponent, "Notifications", "JavaScript", "Displays notifications to the user.", $sprite="bell")
+
+    Rel(customer, uiComponent, "Uses")
+    Rel(uiComponent, authComponent, "Authenticates user")
+    Rel(uiComponent, productCatalogComponent, "Views products")
+    Rel(uiComponent, cartComponent, "Manages cart")
+    Rel(uiComponent, orderComponent, "Places orders")
+    Rel(uiComponent, notificationComponent, "Receives notifications")
+    Rel(uiComponent, analyticsService, "Sends events to")
+    Rel(authComponent, authenticationService, "Verifies credentials with")
+}
+
+' Mobile Application Container
+Container_Boundary(mobile_app, "Mobile Application") {
+    Component(mobileUI, "Mobile Interface", "Kotlin/Swift", "Interface for mobile devices.", $sprite="mobile")
+    Component(mobileAuth, "Mobile Authentication", "Kotlin/Swift", "Authenticates users.", $sprite="auth")
+    Component(mobileCart, "Mobile Cart", "Kotlin/Swift", "Manages cart.", $sprite="cart")
+    Component(mobileNotification, "Mobile Notifications", "Kotlin/Swift", "Receives notifications.", $sprite="bell")
+
+    Rel(customer, mobileUI, "Uses")
+    Rel(mobileUI, mobileAuth, "Authenticates user")
+    Rel(mobileUI, mobileCart, "Manages cart")
+    Rel(mobileUI, mobileNotification, "Receives notifications")
+    Rel(mobileUI, analyticsService, "Sends events to")
+    Rel(mobileAuth, authenticationService, "Verifies credentials with")
+}
+
+' API Container
+Container_Boundary(api, "API") {
+    Component(productService, "Product Service", "Spring Boot", "Manages product information.", $sprite="microservice")
+    Component(orderService, "Order Service", "Spring Boot", "Processes and manages orders.", $sprite="microservice")
+    Component(cartService, "Cart Service", "Spring Boot", "Manages the shopping cart.", $sprite="microservice")
+    Component(customerService, "Customer Service", "Spring Boot", "Manages customer information.", $sprite="microservice")
+    Component(paymentService, "Payment Service", "Spring Boot", "Processes payments.", $sprite="payment")
+    Component(notificationService, "Notification Service", "Spring Boot", "Sends notifications.", $sprite="bell")
+    Component(loggingService, "Log Service", "Logstash", "Records events and errors.", $sprite="log")
+    Component(cacheService, "Cache Service", "Redis", "Stores data in memory for quick access.", $sprite="cache")
+    Component(authenticationComponent, "Authentication Component", "Spring Security", "Manages authentication and authorization.", $sprite="auth")
+    Component(database, "Database", "MySQL", "Stores application data.", $sprite="database")
+    Component(messageQueue, "Message Queue", "RabbitMQ", "Asynchronous communication.", $sprite="queue")
+
+    ' Internal relationships
+    Rel(authenticationComponent, authenticationService, "Authenticates and authorizes with", "OAuth2/HTTPS")
+    Rel(productService, authenticationComponent, "Verifies authentication with")
+    Rel(orderService, authenticationComponent, "Verifies authentication with")
+    Rel(cartService, authenticationComponent, "Verifies authentication with")
+    Rel(customerService, authenticationComponent, "Verifies authentication with")
+    Rel(paymentService, payment_gateway, "Processes payments with")
+    Rel(notificationService, email_system, "Sends emails through")
+    Rel(orderService, messageQueue, "Publishes messages to")
+    Rel(messageQueue, notificationService, "Sends messages to")
+    Rel(loggingService, database, "Stores logs in")
+    Rel(cacheService, productService, "Caches data from")
+    Rel(cacheService, cartService, "Caches data from")
+    Rel(loggingService, analyticsService, "Sends data to")
+    Rel(productService, database, "Reads from")
+    Rel(orderService, database, "Reads and writes to")
+    Rel(cartService, database, "Reads and writes to")
+    Rel(customerService, database, "Reads and writes to")
+}
+
+' Relationships from Web Application to API
+Rel(uiComponent, productService, "Requests products from")
+Rel(uiComponent, cartService, "Manages cart with")
+Rel(uiComponent, orderService, "Sends orders to")
+Rel(uiComponent, notificationService, "Receives notifications from")
+Rel(uiComponent, loggingService, "Logs activities in")
+
+' Relationships from Mobile Application to API
+Rel(mobileUI, productService, "Requests products from")
+Rel(mobileUI, cartService, "Manages cart with")
+Rel(mobileUI, orderService, "Sends orders to")
+Rel(mobileUI, notificationService, "Receives notifications from")
+Rel(mobileUI, loggingService, "Logs activities in")
+
+' Support Agent
+Rel(support, supportSystem, "Uses")
+Rel(supportSystem, customerService, "Accesses data from")
+
+SHOW_LEGEND()
+
+@enduml

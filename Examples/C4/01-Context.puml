@@ -1,0 +1,26 @@
+    @startuml C4_Context_Diagram
+    !define C4P https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master
+    !include C4P/C4_Context.puml
+
+    Person_Ext(customer, "Customer", "Uses our services.", $sprite="person")
+    Person(support, "Support Agent", "Assists customers.", $sprite="person2")
+
+    System(frontend, "Online Store Frontend", "Used for browsing and shopping")
+
+    System(apiSystem, "Backend services and databases", "Handles business logic and data.", $sprite="api")
+
+    System_Ext(paymentGateway, "Payment Gateway", "Processes payments.", $sprite="payment")
+    System_Ext(emailSystem, "Email System", "Sends notifications.", $sprite="email")
+    System_Ext(authService, "Authentication Service", "Manages authentication.", $sprite="auth")
+    System_Ext(supportSystem, "Support System", "Manages tickets.", $sprite="crm")
+
+    Rel(customer, frontend, "Uses for browsing and shopping")
+    Rel(frontend, apiSystem, "Consumes services from")
+    Rel(apiSystem, paymentGateway, "Processes payments with")
+    Rel(apiSystem, emailSystem, "Sends notifications through")
+    Rel(apiSystem, authService, "Authenticates users via")
+    Rel(support, supportSystem, "Manages support using")
+    Rel(supportSystem, apiSystem, "Accesses data from")
+
+    SHOW_LEGEND()
+    @enduml

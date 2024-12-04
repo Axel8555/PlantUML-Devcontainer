@@ -1,0 +1,19 @@
+@startuml Message Style - Sequence Diagram
+
+skin rose
+
+title Message Style - Sequence Diagram
+
+Bob -> Alice
+Bob ->> Alice
+Bob -\ Alice
+Bob \- Alice
+Bob //-- Alice
+
+Bob ->o Alice
+Bob o\-- Alice
+
+Bob <-> Alice
+Bob <->o Alice
+
+@enduml

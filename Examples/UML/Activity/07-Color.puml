@@ -1,0 +1,24 @@
+@startuml Color - Activity Diagram
+
+skin rose
+
+title Color - Activity Diagram 
+
+
+skinparam backgroundColor #AAAAAA
+skinparam activity {
+  StartColor Blue
+  EndColor Red
+  BackgroundColor Green
+  BorderColor Yellow
+}
+
+start
+
+:Eat Hot Wings;
+
+:Drink Homebrew;
+
+stop
+
+@enduml
